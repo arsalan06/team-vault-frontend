@@ -1,0 +1,69 @@
+<main class="page">
+  <section class="card" aria-labelledby="login-title">
+    <header>
+      <h1 id="login-title">Sign in to Team Vault</h1>
+      <p class="subtitle">Welcome back. Enter your details to continue.</p>
+    </header>
+
+    @if (errorMessage(); as message) {
+      <div class="alert" role="alert">{{ message }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      @let email = form.controls.email;
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="username"
+          inputmode="email"
+          [attr.aria-invalid]="email.invalid && email.touched"
+          aria-describedby="email-error"
+        />
+        @if (email.touched && email.invalid) {
+          <p id="email-error" class="field-error">
+            {{ email.hasError('required') ? 'Email is required.' : 'Enter a valid email address.' }}
+          </p>
+        }
+      </div>
+
+      @let password = form.controls.password;
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="current-password"
+            [attr.aria-invalid]="password.invalid && password.touched"
+            aria-describedby="password-error"
+          />
+          <button
+            type="button"
+            class="toggle"
+            (click)="togglePassword()"
+            [attr.aria-pressed]="showPassword()"
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+          >
+            {{ showPassword() ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        @if (password.touched && password.invalid) {
+          <p id="password-error" class="field-error">Password is required.</p>
+        }
+      </div>
+
+      <button type="submit" class="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Signing in…' : 'Sign in' }}
+      </button>
+    </form>
+
+    <p class="switch">
+      New to Team Vault?
+      <a routerLink="/signup" [queryParams]="{ returnUrl: returnUrl() }">Create an account</a>
+    </p>
+  </section>
+</main>

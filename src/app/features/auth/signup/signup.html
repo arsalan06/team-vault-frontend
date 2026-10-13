@@ -1,0 +1,127 @@
+<main class="page">
+  <section class="card" aria-labelledby="signup-title">
+    <header>
+      <h1 id="signup-title">Create your account</h1>
+      <p class="subtitle">Start sharing files with your team.</p>
+    </header>
+
+    @if (errorMessage(); as message) {
+      <div class="alert" role="alert">{{ message }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      @let name = form.controls.name;
+      <div class="field">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          autocomplete="name"
+          [attr.maxlength]="limits.NAME_MAX"
+          [attr.aria-invalid]="name.invalid && name.touched"
+          aria-describedby="name-error"
+        />
+        @if (name.touched && name.invalid) {
+          <p id="name-error" class="field-error">
+            @if (name.hasError('required')) {
+              Name is required.
+            } @else {
+              Name must be {{ limits.NAME_MIN }}–{{ limits.NAME_MAX }} characters.
+            }
+          </p>
+        }
+      </div>
+
+      @let email = form.controls.email;
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          inputmode="email"
+          [attr.aria-invalid]="email.invalid && email.touched"
+          aria-describedby="email-error"
+        />
+        @if (email.touched && email.invalid) {
+          <p id="email-error" class="field-error">
+            @if (email.hasError('required')) {
+              Email is required.
+            } @else if (email.hasError('taken')) {
+              An account with this email already exists.
+              <a routerLink="/login" [queryParams]="{ returnUrl: returnUrl() }">Sign in instead?</a>
+            } @else {
+              Enter a valid email address.
+            }
+          </p>
+        }
+      </div>
+
+      @let password = form.controls.password;
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="new-password"
+            [attr.maxlength]="limits.PASSWORD_MAX"
+            [attr.aria-invalid]="password.invalid && password.touched"
+            aria-describedby="password-hint password-error"
+          />
+          <button
+            type="button"
+            class="toggle"
+            (click)="togglePassword()"
+            [attr.aria-pressed]="showPassword()"
+            [attr.aria-label]="showPassword() ? 'Hide passwords' : 'Show passwords'"
+          >
+            {{ showPassword() ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+        @if (password.touched && password.invalid) {
+          <p id="password-error" class="field-error">
+            @if (password.hasError('required')) {
+              Password is required.
+            } @else {
+              Password must be {{ limits.PASSWORD_MIN }}–{{ limits.PASSWORD_MAX }} characters.
+            }
+          </p>
+        } @else {
+          <p id="password-hint" class="hint">At least {{ limits.PASSWORD_MIN }} characters.</p>
+        }
+      </div>
+
+      @let confirm = form.controls.confirmPassword;
+      @let mismatch = form.hasError('passwordMismatch');
+      <div class="field">
+        <label for="confirmPassword">Confirm password</label>
+        <input
+          id="confirmPassword"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+          [attr.aria-invalid]="confirm.touched && (confirm.invalid || mismatch)"
+          aria-describedby="confirm-error"
+        />
+        @if (confirm.touched && (confirm.invalid || mismatch)) {
+          <p id="confirm-error" class="field-error">
+            {{ confirm.hasError('required') ? 'Please confirm your password.' : 'Passwords do not match.' }}
+          </p>
+        }
+      </div>
+
+      <button type="submit" class="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Creating account…' : 'Create account' }}
+      </button>
+    </form>
+
+    <p class="switch">
+      Already have an account?
+      <a routerLink="/login" [queryParams]="{ returnUrl: returnUrl() }">Sign in</a>
+    </p>
+  </section>
+</main>
