@@ -1,0 +1,62 @@
+h2 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.alert {
+  margin: 0 0 12px;
+}
+
+.members {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.member:first-child {
+  border-top: 0;
+}
+
+.member[aria-busy='true'] {
+  opacity: 0.6;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.email {
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.select {
+  padding: 5px 8px;
+  font-size: 0.85rem;
+}
+
+.more {
+  margin-top: 12px;
+}

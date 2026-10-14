@@ -1,0 +1,30 @@
+<section class="card" aria-labelledby="invite-title">
+  <h1 id="invite-title">Workspace invitation</h1>
+
+  @if (!token()) {
+    <p class="alert" role="alert">This invite link is incomplete. Ask for a new invite.</p>
+    <a routerLink="/workspaces" class="btn">Go to your workspaces</a>
+  } @else {
+    <p class="muted">
+      You've been invited to join a workspace on Team Vault. You're signed in as
+      <strong>{{ auth.user()?.email }}</strong> — the invite must have been sent to this address.
+    </p>
+
+    @if (error(); as message) {
+      <p class="alert" role="alert">{{ message }}</p>
+    }
+
+    <div class="buttons">
+      @if (wrongAccount()) {
+        <button type="button" class="btn btn-primary" (click)="switchAccount()">
+          Sign in with a different account
+        </button>
+      } @else {
+        <button type="button" class="btn btn-primary" [disabled]="accepting()" (click)="accept()">
+          {{ accepting() ? 'Joining…' : 'Accept invite' }}
+        </button>
+      }
+      <a routerLink="/workspaces" class="btn btn-ghost">Not now</a>
+    </div>
+  }
+</section>

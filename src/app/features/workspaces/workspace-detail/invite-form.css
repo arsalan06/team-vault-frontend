@@ -1,0 +1,25 @@
+h2 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.row .input {
+  flex: 1 1 220px;
+}
+
+.alert {
+  margin: 12px 0 0;
+}
+
+.dev-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}

@@ -1,0 +1,19 @@
+.card {
+  max-width: 520px;
+  margin: 32px auto 0;
+}
+
+h1 {
+  font-size: 1.4rem;
+}
+
+p {
+  margin: 12px 0 0;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}

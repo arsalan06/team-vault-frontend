@@ -1,0 +1,60 @@
+<section class="card danger" aria-labelledby="danger-title">
+  <h2 id="danger-title">Danger zone</h2>
+
+  @if (error(); as message) {
+    <p class="alert" role="alert">{{ message }}</p>
+  }
+
+  @if (canLeave()) {
+    <div class="action">
+      <div>
+        <h3>Leave workspace</h3>
+        <p class="muted">You'll lose access until someone invites you again.</p>
+      </div>
+      @if (confirmingLeave()) {
+        <div class="buttons">
+          <button type="button" class="btn btn-danger" [disabled]="busy()" (click)="leave()">
+            {{ busy() ? 'Leaving…' : 'Confirm leave' }}
+          </button>
+          <button type="button" class="btn btn-ghost" (click)="confirmingLeave.set(false)">
+            Cancel
+          </button>
+        </div>
+      } @else {
+        <button type="button" class="btn" (click)="confirmingLeave.set(true)">Leave</button>
+      }
+    </div>
+  }
+
+  @if (canDelete()) {
+    <div class="action stacked">
+      <div>
+        <h3>Delete workspace</h3>
+        <p class="muted">
+          Permanently deletes this workspace, its members' access, pending invites and all files.
+          This cannot be undone.
+        </p>
+      </div>
+      <label for="delete-confirm">
+        Type <strong>{{ workspace().name }}</strong> to confirm
+      </label>
+      <div class="buttons">
+        <input
+          id="delete-confirm"
+          class="input"
+          autocomplete="off"
+          [value]="deleteConfirmText()"
+          (input)="deleteConfirmText.set($any($event.target).value)"
+        />
+        <button
+          type="button"
+          class="btn btn-danger"
+          [disabled]="!deleteUnlocked() || busy()"
+          (click)="delete()"
+        >
+          {{ busy() ? 'Deleting…' : 'Delete workspace' }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

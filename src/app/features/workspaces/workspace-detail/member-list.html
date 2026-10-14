@@ -1,0 +1,87 @@
+<section class="card" aria-labelledby="members-title">
+  <h2 id="members-title">Members</h2>
+
+  @if (actionError(); as message) {
+    <p class="alert" role="alert">{{ message }}</p>
+  }
+
+  @switch (status()) {
+    @case ('loading') {
+      <p class="muted" role="status">Loading members…</p>
+    }
+    @case ('ready') {
+      <ul class="members">
+        @for (member of members(); track member.userId) {
+          @let isMe = member.userId === currentUserId();
+          @let busy = busyId() === member.userId;
+          <li class="member" [attr.aria-busy]="busy">
+            <div class="who">
+              <span class="name">
+                {{ member.name }}
+                @if (isMe) {
+                  <span class="muted">(you)</span>
+                }
+              </span>
+              <span class="muted email">{{ member.email }}</span>
+            </div>
+
+            <div class="actions">
+              @if (canChangeRole(role(), currentUserId(), member)) {
+                <label class="visually-hidden" [for]="'role-' + member.userId">
+                  Role for {{ member.name }}
+                </label>
+                <select
+                  class="select"
+                  [id]="'role-' + member.userId"
+                  [value]="member.role"
+                  [disabled]="busy"
+                  (change)="changeRole(member, $event)"
+                >
+                  @for (r of assignableRoles; track r) {
+                    <option [value]="r">{{ r }}</option>
+                  }
+                </select>
+              } @else {
+                <span class="badge" [class.badge-owner]="member.role === 'OWNER'">
+                  {{ member.role }}
+                </span>
+              }
+
+              @if (canRemove(role(), currentUserId(), member)) {
+                @if (confirmRemoveId() === member.userId) {
+                  <button type="button" class="btn btn-sm btn-danger" (click)="remove(member)">
+                    Confirm remove
+                  </button>
+                  <button type="button" class="btn btn-sm btn-ghost" (click)="cancelRemove()">
+                    Cancel
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn btn-sm"
+                    [disabled]="busy"
+                    [attr.aria-label]="'Remove ' + member.name"
+                    (click)="askRemove(member)"
+                  >
+                    Remove
+                  </button>
+                }
+              }
+            </div>
+          </li>
+        }
+      </ul>
+
+      @if (nextCursor()) {
+        <button
+          type="button"
+          class="btn btn-sm more"
+          (click)="loadMore()"
+          [disabled]="loadingMore()"
+        >
+          {{ loadingMore() ? 'Loading…' : 'Load more members' }}
+        </button>
+      }
+    }
+  }
+</section>

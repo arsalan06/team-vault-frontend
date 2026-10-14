@@ -1,0 +1,52 @@
+<section class="card" aria-labelledby="invite-title">
+  <h2 id="invite-title">Invite people</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    @let email = form.controls.email;
+    <div class="row">
+      <label class="visually-hidden" for="invite-email">Email address</label>
+      <input
+        id="invite-email"
+        class="input"
+        type="email"
+        inputmode="email"
+        autocomplete="off"
+        placeholder="teammate@company.com"
+        formControlName="email"
+        [attr.aria-invalid]="email.touched && email.invalid"
+        aria-describedby="invite-email-error"
+      />
+
+      @if (roles().length > 1) {
+        <label class="visually-hidden" for="invite-role">Role</label>
+        <select id="invite-role" class="select" formControlName="role">
+          @for (r of roles(); track r) {
+            <option [value]="r">{{ r }}</option>
+          }
+        </select>
+      }
+
+      <button type="submit" class="btn btn-primary" [disabled]="sending()">
+        {{ sending() ? 'Sending…' : 'Send invite' }}
+      </button>
+    </div>
+    @if (email.touched && email.invalid) {
+      <p id="invite-email-error" class="field-error">Enter a valid email address.</p>
+    }
+  </form>
+
+  @if (error(); as message) {
+    <p class="alert" role="alert">{{ message }}</p>
+  }
+  @if (sent(); as invite) {
+    <p class="alert alert-success" role="status">
+      Invite sent to <strong>{{ invite.email }}</strong> as {{ invite.role }}. It expires
+      {{ invite.expiresAt | date: 'mediumDate' }}.
+      @if (isDev) {
+        <span class="dev-note">
+          Dev: email isn't set up yet — the accept link is printed in the backend terminal.
+        </span>
+      }
+    </p>
+  }
+</section>

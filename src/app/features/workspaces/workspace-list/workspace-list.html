@@ -1,0 +1,71 @@
+<div class="header">
+  <div>
+    <h1>Workspaces</h1>
+    <p class="muted">Shared spaces for your team's files.</p>
+  </div>
+  @if (!showCreate()) {
+    <button type="button" class="btn btn-primary" (click)="openCreate()">New workspace</button>
+  }
+</div>
+
+@if (showCreate()) {
+  <form class="card create" [formGroup]="createForm" (ngSubmit)="create()" novalidate>
+    <label for="ws-name">Workspace name</label>
+    @let name = createForm.controls.name;
+    <div class="create-row">
+      <input
+        id="ws-name"
+        class="input"
+        formControlName="name"
+        maxlength="100"
+        placeholder="e.g. Marketing team"
+        autocomplete="off"
+        [attr.aria-invalid]="name.touched && name.invalid"
+        aria-describedby="ws-name-error"
+        autofocus
+      />
+      <button type="submit" class="btn btn-primary" [disabled]="creating()">
+        {{ creating() ? 'Creating…' : 'Create' }}
+      </button>
+      <button type="button" class="btn btn-ghost" (click)="cancelCreate()">Cancel</button>
+    </div>
+    @if (name.touched && name.invalid) {
+      <p id="ws-name-error" class="field-error">Name must be 2–100 characters.</p>
+    }
+    @if (createError(); as message) {
+      <p class="alert" role="alert">{{ message }}</p>
+    }
+  </form>
+}
+
+@if (loading()) {
+  <p class="muted" role="status">Loading workspaces…</p>
+} @else if (loadError(); as message) {
+  <div class="alert" role="alert">
+    {{ message }}
+    <button type="button" class="btn btn-sm" (click)="load()">Retry</button>
+  </div>
+} @else if (workspaces().length === 0) {
+  <div class="card empty">
+    <h2>No workspaces yet</h2>
+    <p class="muted">Create one to start sharing files, or ask a teammate to invite you.</p>
+  </div>
+} @else {
+  <ul class="grid">
+    @for (ws of workspaces(); track ws.id) {
+      <li>
+        <a class="card tile" [routerLink]="['/workspaces', ws.id]">
+          <span class="tile-name">{{ ws.name }}</span>
+          <span class="badge" [class.badge-owner]="ws.role === 'OWNER'">{{ ws.role }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+  @if (nextCursor()) {
+    <div class="more">
+      <button type="button" class="btn" (click)="loadMore()" [disabled]="loadingMore()">
+        {{ loadingMore() ? 'Loading…' : 'Load more' }}
+      </button>
+    </div>
+  }
+}

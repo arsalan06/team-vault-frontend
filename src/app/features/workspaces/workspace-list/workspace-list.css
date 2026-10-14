@@ -1,0 +1,91 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.header p {
+  margin: 4px 0 0;
+}
+
+.create {
+  margin-bottom: 24px;
+}
+
+.create label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.create-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.create-row .input {
+  flex: 1 1 220px;
+}
+
+.create .alert {
+  margin: 12px 0 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tile:hover {
+  border-color: var(--accent);
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tile-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty p {
+  margin: 8px 0 0;
+}
+
+.more {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}

@@ -1,0 +1,83 @@
+<a routerLink="/workspaces" class="back">← All workspaces</a>
+
+@let st = state();
+@if (st.status === 'loading') {
+  <p class="muted" role="status">Loading workspace…</p>
+} @else if (st.status === 'not-found') {
+  <div class="card notice">
+    <h1>Workspace not found</h1>
+    <p class="muted">It may have been deleted, or you're not a member of it.</p>
+    <a routerLink="/workspaces" class="btn">Back to your workspaces</a>
+  </div>
+} @else if (st.status === 'error') {
+  <div class="alert" role="alert">
+    {{ st.message }}
+    <button type="button" class="btn btn-sm" (click)="reload()">Retry</button>
+  </div>
+} @else {
+  @if (workspace(); as ws) {
+    <header class="header">
+      @if (editing()) {
+        <form class="rename" [formGroup]="renameForm" (ngSubmit)="saveRename()" novalidate>
+          <label class="visually-hidden" for="rename-input">Workspace name</label>
+          <input
+            id="rename-input"
+            class="input"
+            formControlName="name"
+            maxlength="100"
+            autocomplete="off"
+            autofocus
+            (keydown.escape)="cancelRename()"
+          />
+          <button type="submit" class="btn btn-primary" [disabled]="saving()">
+            {{ saving() ? 'Saving…' : 'Save' }}
+          </button>
+          <button type="button" class="btn btn-ghost" (click)="cancelRename()">Cancel</button>
+        </form>
+        @if (renameForm.controls.name.touched && renameForm.controls.name.invalid) {
+          <p class="field-error">Name must be 2–100 characters.</p>
+        }
+        @if (renameError(); as message) {
+          <p class="alert" role="alert">{{ message }}</p>
+        }
+      } @else {
+        <div class="title-row">
+          <h1>{{ ws.name }}</h1>
+          <span class="badge" [class.badge-owner]="role() === 'OWNER'">{{ role() }}</span>
+          @if (canRename()) {
+            <button type="button" class="btn btn-sm btn-ghost" (click)="startRename()">
+              Rename
+            </button>
+          }
+        </div>
+      }
+
+      <div class="storage">
+        <div class="storage-label">
+          <span>Storage</span>
+          <span class="muted">
+            {{ formatBytes(ws.storageUsed) }} of {{ formatBytes(ws.storageLimit) }}
+          </span>
+        </div>
+        <div
+          class="meter"
+          role="meter"
+          aria-label="Storage used"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [attr.aria-valuenow]="storagePercent()"
+        >
+          <div class="meter-fill" [style.width.%]="storagePercent()"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="sections">
+      @if (canInvite()) {
+        <app-invite-form [workspaceId]="ws.id" [role]="role()" />
+      }
+      <app-member-list [workspaceId]="ws.id" [role]="role()" />
+      <app-danger-zone [workspace]="ws" [role]="role()" />
+    </div>
+  }
+}
