@@ -66,7 +66,8 @@ export class AuthService {
     await this.refresh();
   }
 
-  async logout(): Promise<void> {
+  /** Ends the session; `returnUrl` brings the user back there after signing in again. */
+  async logout(returnUrl?: string): Promise<void> {
     try {
       await firstValueFrom(
         this.http.post<void>(`${this.authUrl}/logout`, null, this.authRequestOptions()),
@@ -75,7 +76,7 @@ export class AuthService {
       // The local session is cleared regardless; a failed server call only
       // means the refresh token expires on its own instead of right now.
     } finally {
-      this.endSession();
+      this.endSession(returnUrl);
     }
   }
 

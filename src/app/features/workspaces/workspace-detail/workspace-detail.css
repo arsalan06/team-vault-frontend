@@ -1,0 +1,88 @@
+.back {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back:hover {
+  color: var(--text);
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.title-row h1 {
+  overflow-wrap: anywhere;
+}
+
+.rename {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rename .input {
+  flex: 1 1 240px;
+  font-size: 1.1rem;
+}
+
+.header .alert {
+  margin: 8px 0 0;
+}
+
+.storage {
+  max-width: 360px;
+  margin-top: 16px;
+}
+
+.storage-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.meter {
+  height: 8px;
+  overflow: hidden;
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+}
+
+.sections {
+  display: grid;
+  gap: 16px;
+}
+
+.notice {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.notice p {
+  margin: 8px 0 16px;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}

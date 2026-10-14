@@ -1,0 +1,51 @@
+.danger {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+}
+
+h2 {
+  margin-bottom: 4px;
+  font-size: 1.1rem;
+}
+
+h3 {
+  font-size: 0.95rem;
+}
+
+.alert {
+  margin: 12px 0 0;
+}
+
+.action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.action p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+}
+
+.stacked {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.stacked label {
+  font-size: 0.9rem;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.buttons .input {
+  flex: 1 1 200px;
+}
